@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Cafe Busra</title>
-   <link rel="shortcut icon" href="https://i.ibb.co/ycf2fV47/kc.png" type="image/x-icon">       
+    <title>Coffe Busra</title>
+    <link rel="shortcut icon" href="https://static.vecteezy.com/system/resources/previews/043/212/205/original/cup-of-coffee-logo-design-on-transparent-background-free-png.png" type="image/x-icon">       
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=Battambang:wght@400;700&display=swap" rel="stylesheet" />
     <!-- QR Code & Chart.js & Firebase -->
@@ -255,7 +255,7 @@
       <nav class="navbar">
         <div class="logo">
           <button class="hamburger-btn" onclick="toggleMobileMenu()">☰</button>
-          CAFE<span>BUSRA</span>
+          COFE<span>BUSRA</span>
         </div>
         
         <div class="nav-tabs" id="admin-nav-tabs">
@@ -386,7 +386,7 @@
             <span id="c-table-text">Table 1</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         </div>
-        <div class="logo" style="font-size:3.5rem; justify-content:center; text-shadow: 0 4px 20px rgba(201,168,76,0.5);">CAFE<span>BUSRA</span></div>
+        <div class="logo" style="font-size:3.5rem; justify-content:center; text-shadow: 0 4px 20px rgba(201,168,76,0.5);">COFE<span>BUSRA</span></div>
         <div style="color:var(--gold2); font-size:1.1rem; margin-top:0.8rem; font-weight:600; letter-spacing:2px; text-transform:uppercase;" data-i18n="tagline">Scan. Order. Enjoy.</div>
       </div>
       
@@ -831,7 +831,7 @@
 
       // QR
       function showQR(num) { document.getElementById("qr-modal").classList.add("open"); document.getElementById("qr-table-label").textContent = "Table " + num; document.getElementById("qr-display").innerHTML = ""; const url = window.location.href.split("?")[0] + "?table=" + num; try { new QRCode(document.getElementById("qr-display"), { text: url, width: 200, height: 200, colorDark : "#000000", colorLight : "#ffffff" }); } catch(e) { document.getElementById("qr-display").innerHTML = "QR Code"; } }
-      function printQR() { const win = window.open("", "_blank"); win.document.write(`<html><body style="text-align:center;font-family:sans-serif;padding:40px;"><h2>CAFE BUSRA</h2><p>${document.getElementById("qr-table-label").textContent}</p>${document.getElementById("qr-display").innerHTML}<p style="font-size:12px;">Scan to order</p><\/body><\/html>`); win.document.close(); setTimeout(() => { win.print(); win.close(); }, 300); }
+      function printQR() { const win = window.open("", "_blank"); win.document.write(`<html><body style="text-align:center;font-family:sans-serif;padding:40px;"><h2>COFE BUSRA</h2><p>${document.getElementById("qr-table-label").textContent}</p>${document.getElementById("qr-display").innerHTML}<p style="font-size:12px;">Scan to order</p><\/body><\/html>`); win.document.close(); setTimeout(() => { win.print(); win.close(); }, 300); }
 
       // ADMIN MENU (BEAUTIFUL EDIT CARDS WITH NEW TOGGLE SWITCH)
       function renderAdminMenu() { 
@@ -1066,7 +1066,7 @@
           const win = window.open("", "_blank"); 
           const itemsHtml = order.items.map(i => `<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>${i.qty}x ${i.displayName}</span><span>$${(i.price * i.qty).toFixed(2)}</span></div>`).join(""); 
           win.document.write(`<html><body style="font-family:monospace;padding:20px;width:300px;color:black;">
-            <h2 style="text-align:center; margin-bottom:5px;">CAFE BUSRA</h2>
+            <h2 style="text-align:center; margin-bottom:5px;">COFE BUSRA</h2>
             <div style="text-align:center;font-size:12px;margin-bottom:15px;border-bottom:1px dashed #000;padding-bottom:10px;">Order: ${order.id}<br>Table: ${order.table}<br>${new Date(order.time).toLocaleString()}</div>
             <div style="margin-bottom:15px;border-bottom:1px dashed #000;padding-bottom:10px;">${itemsHtml}</div>
             
