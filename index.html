@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Coffee Busra</title>
-    <link rel="shortcut icon" href="https://static.vecteezy.com/system/resources/previews/043/212/205/original/cup-of-coffee-logo-design-on-transparent-background-free-png.png" type="image/x-icon">         
+    <link rel="shortcut icon" href="https://static.vecteezy.com/system/resources/previews/043/212/205/original/cup-of-coffee-logo-design-on-transparent-background-free-png.png" type="image/x-icon">             
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=Battambang:wght@400;700&display=swap" rel="stylesheet" />
     <!-- QR Code & Chart.js & Firebase -->
@@ -388,7 +388,14 @@
         
         <div id="tab-menu" style="display:none;" class="fade-in"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;"><div class="section-title" style="margin:0;" data-i18n="menuItemsTitle">Menu Items</div><button class="btn btn-gold" onclick="openAddMenuModal()" data-i18n="addItemBtn">+ Add Item</button></div><div class="c-menu-grid" id="admin-menu-grid"></div></div>
         
-        <div id="tab-orders" style="display:none;" class="fade-in"><div class="section-title" data-i18n="allOrdersTitle">All Orders</div><div class="orders-panel"><div class="order-row header"><div>ID</div><div data-i18n="table">Table</div><div data-i18n="items">Items</div><div data-i18n="total">Total</div><div data-i18n="status">Status</div><div data-i18n="actions">Actions</div></div><div id="all-orders-list"></div></div></div>
+        <div id="tab-orders" style="display:none;" class="fade-in">
+            <div class="section-title" data-i18n="allOrdersTitle">All Orders</div>
+            <div class="orders-panel">
+                <div class="order-row header"><div>ID</div><div data-i18n="table">Table</div><div data-i18n="items">Items</div><div data-i18n="total">Total</div><div data-i18n="status">Status</div><div data-i18n="actions">Actions</div></div>
+                <!-- This container will hold the newly grouped orders -->
+                <div id="all-orders-list"></div>
+            </div>
+        </div>
         
         <!-- KITCHEN (MODIFIED FOR WORKFLOW) -->
         <div id="tab-kitchen" style="display:none;" class="fade-in"><div class="section-title" data-i18n="kitchenDisplayTitle">Kitchen Display</div><div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:1.5rem;" id="kitchen-grid"></div></div>
@@ -589,7 +596,7 @@
         </div>
     </div>
 
-    <!-- NEW: Order Preview Modal (For Dashboard Orders Button) -->
+    <!-- Order Preview Modal (For Dashboard Orders Button) -->
     <div class="modal-overlay" id="order-preview-modal">
         <div class="modal" style="max-width:700px; padding:2.5rem;">
             <button class="btn-close" onclick="document.getElementById('order-preview-modal').classList.remove('open')">&times;</button>
@@ -682,7 +689,6 @@
           if (translations[currentLang][key]) {
             if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[currentLang][key];
             else {
-              // Ensure we don't overwrite child spans like badges
               if(el.querySelector('.nav-badge')) {
                  const badge = el.querySelector('.nav-badge');
                  el.innerHTML = translations[currentLang][key] + ' ';
@@ -718,7 +724,6 @@
         if (!localStorage.getItem(DB_KEY.count)) localStorage.setItem(DB_KEY.count, "100");
         if (!localStorage.getItem(DB_KEY.promo)) localStorage.setItem(DB_KEY.promo, JSON.stringify({ active: true, url: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=1200&h=400&fit=crop" }));
 
-        // Init Analytics DB if empty
         if (!localStorage.getItem(DB_KEY.analytics)) {
             localStorage.setItem(DB_KEY.analytics, JSON.stringify({
                 totalRevenue: 0, totalOrders: 0, totalProducts: 0,
@@ -803,10 +808,9 @@
         if (currentAdminTab === "settings") loadSettings();
         if (currentAdminTab === "overview") { updateChart(currentChartMode); renderProductAnalytics(); }
         if (currentView === "customer") { renderPromoBanner(); updateMyOrdersUI(); updateMyOrdersBtn(); }
-        renderTableLive(); // update live table if open
+        renderTableLive(); 
       }
       
-      // Update Real-Time Notification Badges
       function updateBadges() {
           const orders = dbGet(DB_KEY.orders) || [];
           const pendingCount = orders.filter(o => o.status === 'pending').length;
@@ -841,7 +845,6 @@
         revenueChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Revenue ($)', data: data, borderColor: '#c9a84c', backgroundColor: 'rgba(201, 168, 76, 0.2)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: '#e8c97a' }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8a7d6b' } }, x: { grid: { display: false }, ticks: { color: '#8a7d6b' } } } } });
       }
 
-      // Sync and Render Product Analytics (Dynamically from Done Orders)
       function syncAnalyticsData() {
           const orders = (dbGet(DB_KEY.orders)||[]).filter(o => o.status === 'done');
           const menu = dbGet(DB_KEY.menu)||[];
@@ -931,7 +934,6 @@
       function addTable() { const num = parseInt(document.getElementById("add-table-num").value); if (!num) return; let tables = dbGet(DB_KEY.tables) || []; if (tables.find(t => t.num === num)) return showToast("Table Exists!"); tables.push({ id: Date.now(), num, status: "free", currentOrders: 0 }); tables.sort((a, b) => a.num - b.num); dbSet(DB_KEY.tables, tables); document.getElementById("add-table-num").value = ""; refreshUI(); showToast("Table Added!"); }
       function removeTable(num) { if (confirm("Delete Table?")) { dbSet(DB_KEY.tables, (dbGet(DB_KEY.tables)||[]).filter(t => t.num !== num)); refreshUI(); } }
       
-      // Tables grid now has a "View" button for live monitoring
       function renderAdminTables() { 
           const el = document.getElementById("admin-tables-grid"); 
           if(el) el.innerHTML = (dbGet(DB_KEY.tables)||[]).map(t => `
@@ -945,7 +947,6 @@
             </div>`).join(""); 
       }
 
-      // Live Table View Monitoring
       let currentLiveTable = null;
       function viewTableLive(num) {
           currentLiveTable = num;
@@ -989,11 +990,9 @@
           document.getElementById('tv-total').textContent = "$" + grandTotal.toFixed(2);
       }
 
-      // QR
       function showQR(num) { document.getElementById("qr-modal").classList.add("open"); document.getElementById("qr-table-label").textContent = "Table " + num; document.getElementById("qr-display").innerHTML = ""; const url = window.location.href.split("?")[0] + "?table=" + num; try { new QRCode(document.getElementById("qr-display"), { text: url, width: 200, height: 200, colorDark : "#000000", colorLight : "#ffffff" }); } catch(e) { document.getElementById("qr-display").innerHTML = "QR Code"; } }
       function printQR() { const win = window.open("", "_blank"); win.document.write(`<html><body style="text-align:center;font-family:sans-serif;padding:40px;"><h2>COFFEE BUSRA</h2><p>${document.getElementById("qr-table-label").textContent}</p>${document.getElementById("qr-display").innerHTML}<p style="font-size:12px;">Scan to order</p><\/body><\/html>`); win.document.close(); setTimeout(() => { win.print(); win.close(); }, 300); }
 
-      // ADMIN MENU
       function renderAdminMenu() { 
         const el = document.getElementById("admin-menu-grid"); 
         if(el) {
@@ -1036,22 +1035,100 @@
       function saveMenuItem() { const name=document.getElementById("m-name").value, cat=document.getElementById("m-cat").value, desc=document.getElementById("m-desc").value, price=parseFloat(document.getElementById("m-price").value), image=document.getElementById("m-image").value, available=document.getElementById("m-available").value==="true"; if(!name||!price) return showToast("Invalid Inputs"); let menu=dbGet(DB_KEY.menu)||[]; if(editingMenuId) menu=menu.map(m=>m.id===editingMenuId?{...m,name,cat,desc,price,image,available}:m); else menu.push({id:Date.now(),name,cat,desc,price,image,available}); dbSet(DB_KEY.menu,menu); document.getElementById("add-menu-modal").classList.remove("open"); refreshUI(); showToast("Item Saved!");}
       function toggleAvailable(id) { let m=dbGet(DB_KEY.menu)||[]; m=m.map(x=>x.id===id?{...x,available:!x.available}:x); dbSet(DB_KEY.menu,m); refreshUI(); showToast("Status Updated!"); }
 
-      // ORDERS & KITCHEN
+      // ================= IMPROVED "ALL ORDERS" SECTION =================
+      let openOrderGroups = new Set();
+      
+      function getOrderGroup(timestamp) {
+          const date = new Date(timestamp);
+          const now = new Date();
+          
+          const isSameDay = (d1, d2) => d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+          
+          if (isSameDay(date, now)) return "Today";
+          
+          const yesterday = new Date(now);
+          yesterday.setDate(yesterday.getDate() - 1);
+          if (isSameDay(date, yesterday)) return "Yesterday";
+          
+          const diffTime = Math.abs(now - date);
+          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
+          
+          if (diffDays <= 7) return "This Week";
+          if (date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear()) return "This Month";
+          
+          const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          return monthNames[date.getMonth()] + " " + date.getFullYear();
+      }
+
+      function toggleOrderGroup(id) {
+          const content = document.getElementById(id);
+          const icon = document.getElementById('icon-' + id);
+          if (content.style.display === "none") {
+              content.style.display = "block";
+              icon.textContent = "▲";
+              openOrderGroups.add(id);
+          } else {
+              content.style.display = "none";
+              icon.textContent = "▼";
+              openOrderGroups.delete(id);
+          }
+      }
+
       function renderAllOrders() { 
           const el = document.getElementById("all-orders-list"); 
-          if(el) el.innerHTML = (dbGet(DB_KEY.orders)||[]).slice().reverse().map(o => `
-            <div class="order-row" style="cursor:pointer;" onclick="viewOrderPreview('${o.id}')">
-                <div>${o.id}</div>
-                <div><strong style="color:var(--cream)">T-${o.table}</strong></div>
-                <div style="font-size:0.8rem; color:var(--muted)">${o.items.map(i=>i.qty+"x "+i.displayName).join(", ")}</div>
-                <div><strong style="color:var(--gold)">$${o.total.toFixed(2)}</strong></div>
-                <div><span class="order-status status-${o.status}">${o.status}</span></div>
-                <div style="display:flex;gap:0.5rem;">
-                    <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); advanceOrder('${o.id}')">Next</button> 
-                    <button class="btn btn-danger btn-sm" style="padding:0.3rem 0.6rem;" onclick="event.stopPropagation(); deleteOrder('${o.id}')">&times;</button>
-                </div>
-            </div>`).join(""); 
+          if(!el) return;
+          
+          const orders = (dbGet(DB_KEY.orders)||[]).slice().reverse();
+          if(orders.length === 0) {
+              el.innerHTML = "<div style='padding:2rem; text-align:center; color:var(--muted);'>No orders found.</div>";
+              return;
+          }
+          
+          const groups = {};
+          const groupOrder = []; 
+          
+          orders.forEach(o => {
+              const groupName = getOrderGroup(o.time);
+              if(!groups[groupName]) {
+                  groups[groupName] = [];
+                  groupOrder.push(groupName);
+              }
+              groups[groupName].push(o);
+          });
+          
+          let html = "";
+          groupOrder.forEach(gName => {
+              const gOrders = groups[gName];
+              const groupId = 'group-' + gName.replace(/\s+/g, '-');
+              const isOpen = openOrderGroups.has(groupId);
+              
+              html += `
+              <div class="order-group" style="margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; min-width: 600px;">
+                  <div class="group-header" onclick="toggleOrderGroup('${groupId}')" style="background:linear-gradient(145deg, var(--surface3), var(--surface2)); padding:1rem 1.5rem; cursor:pointer; font-weight:bold; color:var(--gold); display:flex; justify-content:space-between; align-items:center;">
+                      <span style="font-size:1.1rem; text-transform:uppercase; letter-spacing:1px;">${gName} <span style="background:rgba(0,0,0,0.4); color:var(--cream); padding:2px 10px; border-radius:12px; font-size:0.85rem; margin-left:10px;">${gOrders.length} orders</span></span>
+                      <span id="icon-${groupId}" style="color:var(--muted); transition:0.3s;">${isOpen ? '▲' : '▼'}</span>
+                  </div>
+                  <div id="${groupId}" class="group-content" style="display:${isOpen ? 'block' : 'none'}; background:var(--surface2);">
+                      ${gOrders.map(o => `
+                          <div class="order-row" style="cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.05);" onclick="viewOrderPreview('${o.id}')">
+                              <div>${o.id}</div>
+                              <div><strong style="color:var(--cream)">T-${o.table}</strong></div>
+                              <div style="font-size:0.8rem; color:var(--muted)">${o.items.map(i=>i.qty+"x "+i.displayName).join(", ")}</div>
+                              <div><strong style="color:var(--gold)">$${o.total.toFixed(2)}</strong></div>
+                              <div><span class="order-status status-${o.status}">${o.status}</span></div>
+                              <div style="display:flex;gap:0.5rem;">
+                                  <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); advanceOrder('${o.id}')">Next</button> 
+                                  <button class="btn btn-danger btn-sm" style="padding:0.3rem 0.6rem;" onclick="event.stopPropagation(); deleteOrder('${o.id}')">&times;</button>
+                              </div>
+                          </div>
+                      `).join("")}
+                  </div>
+              </div>`;
+          });
+          
+          el.innerHTML = html;
       }
+      
       function advanceOrder(id) { const seq=["pending","preparing","ready","done"]; let orders=dbGet(DB_KEY.orders)||[]; orders=orders.map(o => { if(o.id===id) { const s=seq[Math.min(seq.indexOf(o.status)+1,3)]; if(s==="done") updateTableStatus(o.table,-1); return {...o,status:s}; } return o; }); dbSet(DB_KEY.orders,orders); refreshUI(); }
       function deleteOrder(id) { if(!confirm("Delete Order?")) return; let orders=dbGet(DB_KEY.orders)||[], o=orders.find(x=>x.id===id); if(o&&o.status!=="done") updateTableStatus(o.table,-1); dbSet(DB_KEY.orders, orders.filter(x=>x.id!==id)); refreshUI(); }
       
@@ -1132,8 +1209,6 @@
           `).join(""); 
       }
       
-      function updateTableStatus(num, delta) { let tables=dbGet(DB_KEY.tables)||[]; tables=tables.map(t=>{ if(t.num===num){ const o=Math.max(0,t.currentOrders+delta); return {...t,currentOrders:o,status:o>0?"occupied":"free"};} return t;}); dbSet(DB_KEY.tables,tables); }
-
       // ================= CASHIER (DUAL CURRENCY & RECEIPT REVIEW) =================
       let currentReceiptOrder = null;
       let currentPayOrder = null;
@@ -1510,7 +1585,7 @@
         }
 
         const ex = cart.find(c => c.cartId == cartId); 
-        if(ex) ex.qty++; else cart.push({...item, cartId: cartId, displayName: dName, qty:1, cat: item.cat}); // Store cat for Analytics
+        if(ex) ex.qty++; else cart.push({...item, cartId: cartId, displayName: dName, qty:1, cat: item.cat}); 
         updateCartUI(); showToast("Added to cart 🛒");
       }
       
@@ -1546,7 +1621,6 @@
         let count = parseInt(dbGet(DB_KEY.count)) || 100; count++; dbSet(DB_KEY.count, count);
         const orderId = "#"+count;
         
-        // Build the order Object
         const order = { 
             id: orderId, 
             table: customerTableNum, 
@@ -1554,11 +1628,9 @@
             total, note, status: "pending", time: Date.now() 
         };
         
-        // Save locally to instant UI update
         let orders = dbGet(DB_KEY.orders)||[]; orders.push(order); dbSet(DB_KEY.orders, orders); updateTableStatus(customerTableNum, 1);
         mySessionOrders.push(orderId); localStorage.setItem('my_orders_history', JSON.stringify(mySessionOrders));
 
-        // Telegram Geolocation Handling - with strict fallbacks
         let tgSent = false;
         
         const wrapUpOrder = () => {
@@ -1579,7 +1651,6 @@
                 { timeout: 3500, enableHighAccuracy: true } 
             );
             
-            // Hard timeout in case browser hangs on Geolocation prompt natively
             setTimeout(() => {
                 if(!tgSent) { tgSent = true; notifyTelegram(order, null, null); wrapUpOrder(); }
             }, 4000);
