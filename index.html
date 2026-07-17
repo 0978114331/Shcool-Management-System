@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Coffe Busra</title>
-    <link rel="shortcut icon" href="https://static.vecteezy.com/system/resources/previews/043/212/205/original/cup-of-coffee-logo-design-on-transparent-background-free-png.png" type="image/x-icon">       
+    <title>Coffee Busra</title>
+    <link rel="shortcut icon" href="https://static.vecteezy.com/system/resources/previews/043/212/205/original/cup-of-coffee-logo-design-on-transparent-background-free-png.png" type="image/x-icon">         
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=Battambang:wght@400;700&display=swap" rel="stylesheet" />
     <!-- QR Code & Chart.js & Firebase -->
@@ -94,9 +94,9 @@
 
       /* ===== ORDERS PANEL ===== */
       .orders-panel { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; overflow-x: auto; animation: fadeIn 0.5s; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
-      .order-row { display: grid; grid-template-columns: 60px 80px 1fr 90px 100px 140px; align-items: center; padding: 1.2rem 1.5rem; border-bottom: 1px solid rgba(201, 168, 76, 0.08); font-size: 0.9rem; min-width: 600px; transition: background 0.2s; }
+      .order-row { display: grid; grid-template-columns: 60px 80px 1fr 90px 100px 140px; align-items: center; padding: 1.2rem 1.5rem; border-bottom: 1px solid rgba(201, 168, 76, 0.08); font-size: 0.9rem; min-width: 600px; transition: background 0.2s; cursor: pointer; }
       .order-row:hover { background: rgba(201, 168, 76, 0.05); }
-      .order-row.header { font-size: 0.75rem; text-transform: uppercase; color: var(--gold); background: var(--surface3); font-weight: bold; letter-spacing: 1px; padding: 1rem 1.5rem; }
+      .order-row.header { font-size: 0.75rem; text-transform: uppercase; color: var(--gold); background: var(--surface3); font-weight: bold; letter-spacing: 1px; padding: 1rem 1.5rem; cursor: default; }
       .order-status { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; display: inline-block; border: 1px solid transparent; }
       .status-pending { background: rgba(243, 156, 18, 0.15); color: #f39c12; border-color: rgba(243, 156, 18, 0.3); }
       .status-preparing { background: rgba(52, 152, 219, 0.15); color: var(--blue); border-color: rgba(52, 152, 219, 0.3); }
@@ -241,7 +241,7 @@
         .stats-row { grid-template-columns: repeat(2, 1fr); }
         .two-col { grid-template-columns: 1fr; }
         .hamburger-btn { display: block; }
-        .nav-tabs { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: rgba(35, 31, 26, 0.98); padding: 1rem; border-bottom: 1px solid var(--border); box-shadow: 0 15px 40px rgba(0,0,0,0.6); backdrop-filter: blur(15px); }
+        .nav-tabs { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: rgba(35, 31, 26, 0.98); padding: 1rem; border-bottom: 1px solid var(--border); box-shadow: 0 15px 40px rgba(0,0,0,0.6); backdrop-filter: blur(15px); z-index: 1000; }
         .nav-tabs.show { display: flex; align-items: stretch; }
         .nav-tab { text-align: left; padding: 1.2rem; font-size: 1.05rem; border-bottom: 1px solid rgba(255,255,255,0.05); border-radius: 0; }
         .nav-tab:last-child { border-bottom: none; }
@@ -255,7 +255,7 @@
       <nav class="navbar">
         <div class="logo">
           <button class="hamburger-btn" onclick="toggleMobileMenu()">☰</button>
-          COFE<span>BUSRA</span>
+          COFFEE<span>BUSRA</span>
         </div>
         
         <div class="nav-tabs" id="admin-nav-tabs">
@@ -293,6 +293,7 @@
             </div>
             <div class="chart-wrapper"><canvas id="revenueChart"></canvas></div>
           </div>
+          
           <div class="two-col">
             <div>
               <div class="section-title"><span data-i18n="recentOrdersTitle">Recent Orders</span></div>
@@ -306,6 +307,26 @@
               <div class="tables-grid" id="overview-tables-grid"></div>
             </div>
           </div>
+          
+          <!-- NEW: PRODUCT SALES ANALYTICS -->
+          <div class="section-title" style="margin-top:3rem;"><span data-i18n="productAnalytics">Product Sales Analytics</span></div>
+          <div class="stats-row">
+              <div class="stat-card"><div class="stat-label" data-i18n="totalProductsSold">Total Products Sold</div><div class="stat-value" id="stat-total-products">0</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="topCategory">Top Category</div><div class="stat-value" id="stat-top-cat">-</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="bestSeller">Best Seller</div><div class="stat-value" id="stat-best-seller" style="font-size:1.5rem;">-</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="avgOrderValue">Avg Order Value</div><div class="stat-value" id="stat-aov">$0.00</div></div>
+          </div>
+          <div class="two-col">
+              <div class="chart-container">
+                  <div class="stat-label" style="margin-bottom:1rem; font-size:1.1rem; color:var(--cream);">Sales by Category</div>
+                  <div class="chart-wrapper"><canvas id="categoryChart"></canvas></div>
+              </div>
+              <div class="chart-container">
+                  <div class="stat-label" style="margin-bottom:1rem; font-size:1.1rem; color:var(--cream);">Top 10 Products</div>
+                  <div class="chart-wrapper"><canvas id="topProductsChart"></canvas></div>
+              </div>
+          </div>
+          
         </div>
 
         <!-- SETTINGS -->
@@ -368,7 +389,10 @@
         <div id="tab-menu" style="display:none;" class="fade-in"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;"><div class="section-title" style="margin:0;" data-i18n="menuItemsTitle">Menu Items</div><button class="btn btn-gold" onclick="openAddMenuModal()" data-i18n="addItemBtn">+ Add Item</button></div><div class="c-menu-grid" id="admin-menu-grid"></div></div>
         
         <div id="tab-orders" style="display:none;" class="fade-in"><div class="section-title" data-i18n="allOrdersTitle">All Orders</div><div class="orders-panel"><div class="order-row header"><div>ID</div><div data-i18n="table">Table</div><div data-i18n="items">Items</div><div data-i18n="total">Total</div><div data-i18n="status">Status</div><div data-i18n="actions">Actions</div></div><div id="all-orders-list"></div></div></div>
+        
+        <!-- KITCHEN (MODIFIED FOR WORKFLOW) -->
         <div id="tab-kitchen" style="display:none;" class="fade-in"><div class="section-title" data-i18n="kitchenDisplayTitle">Kitchen Display</div><div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:1.5rem;" id="kitchen-grid"></div></div>
+        
         <div id="tab-cashier" style="display:none;" class="fade-in"><div class="section-title" data-i18n="cashierDashboard">Cashier Dashboard</div><div class="two-col"><div><div style="font-weight:700;font-size:1.2rem;color:var(--cream);margin-bottom:1.5rem; letter-spacing:1px; text-transform:uppercase;" data-i18n="processPayments">Active Orders</div><div id="cashier-active-list" style="display:grid;gap:1.2rem;"></div></div><div><div style="font-weight:700;font-size:1.2rem;color:var(--green);margin-bottom:1.5rem; letter-spacing:1px; text-transform:uppercase;" data-i18n="completedToday">Completed Today</div><div id="cashier-completed-list" style="display:grid;gap:1.2rem;"></div></div></div></div>
 
       </div>
@@ -386,7 +410,7 @@
             <span id="c-table-text">Table 1</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         </div>
-        <div class="logo" style="font-size:3.5rem; justify-content:center; text-shadow: 0 4px 20px rgba(201,168,76,0.5);">COFE<span>BUSRA</span></div>
+        <div class="logo" style="font-size:3.5rem; justify-content:center; text-shadow: 0 4px 20px rgba(201,168,76,0.5);">COFFEE<span>BUSRA</span></div>
         <div style="color:var(--gold2); font-size:1.1rem; margin-top:0.8rem; font-weight:600; letter-spacing:2px; text-transform:uppercase;" data-i18n="tagline">Scan. Order. Enjoy.</div>
       </div>
       
@@ -565,6 +589,43 @@
         </div>
     </div>
 
+    <!-- NEW: Order Preview Modal (For Dashboard Orders Button) -->
+    <div class="modal-overlay" id="order-preview-modal">
+        <div class="modal" style="max-width:700px; padding:2.5rem;">
+            <button class="btn-close" onclick="document.getElementById('order-preview-modal').classList.remove('open')">&times;</button>
+            <h2 style="color:var(--gold);margin-bottom:0.5rem; font-family:'Playfair Display',serif; font-size:2.2rem;" data-i18n="orderDetails">Order Details</h2>
+            
+            <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem; color:var(--muted);">
+                <span id="preview-order-id" style="font-weight:bold; font-size:1.1rem;">Order #101</span>
+                <span id="preview-order-time">Time</span>
+            </div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(145deg, var(--surface3), var(--surface2)); padding:1.5rem; border-radius:16px; margin-bottom:1.5rem; border:1px solid var(--border); box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+                <div>
+                    <div style="font-size:0.85rem; color:var(--muted); text-transform:uppercase; margin-bottom:0.3rem;" data-i18n="tableNumber">Table Number</div>
+                    <div style="font-size:1.8rem; font-weight:bold; color:var(--cream);" id="preview-order-table">T-1</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:0.85rem; color:var(--muted); text-transform:uppercase; margin-bottom:0.3rem;" data-i18n="orderStatus">Status</div>
+                    <div id="preview-order-status" class="order-status" style="font-size:0.9rem; padding:0.5rem 1.2rem;">PENDING</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:0.85rem; color:var(--muted); text-transform:uppercase; margin-bottom:0.3rem;" data-i18n="totalAmount">Total Amount</div>
+                    <div style="font-size:1.8rem; font-weight:bold; color:var(--gold); text-shadow:0 2px 10px rgba(201,168,76,0.3);" id="preview-order-total">$0.00</div>
+                </div>
+            </div>
+
+            <div id="preview-order-note" style="background:rgba(231,76,60,0.1); border-left:4px solid var(--red); padding:1rem; margin-bottom:1.5rem; border-radius:8px; display:none; color:var(--cream); font-size:0.95rem;">
+                <!-- note injected here -->
+            </div>
+
+            <h3 style="color:var(--gold); margin-bottom:1rem; font-size:1.2rem; font-family:'Playfair Display',serif;" data-i18n="orderedProducts">Ordered Products</h3>
+            <div id="preview-order-items" style="display:grid; gap:1rem; max-height:40vh; overflow-y:auto; padding-right:10px;">
+                <!-- dynamic items -->
+            </div>
+        </div>
+    </div>
+
     <div class="toast-container" id="toast-container"></div>
     <div id="print-area" style="display:none;"></div>
 
@@ -583,7 +644,9 @@
           checkoutTitle: "Checkout", totalAmount: "Total Amount:", cashReceived: "Cash Received", changeReturn: "Change:", payPrintBtn: "Pay & Print", payConfirmBtn: "Confirm", 
           myOrdersBtn: "My Orders", revenueAnalytics: "Revenue", daily: "Daily", weekly: "Weekly", monthly: "Monthly", placeOrderBtn: "Place Order",
           editTableTitle: "Change Table", editTableDesc: "Enter your current table number", confirmBtn: "Confirm Table", seeMoreBtn: "See More ↓", 
-          sugarLevel: "Sugar Level", iceLevel: "Ice Level", specialNote: "Special Note", addToCartBtn: "Add to Cart", tableOrders: "Table Orders"
+          sugarLevel: "Sugar Level", iceLevel: "Ice Level", specialNote: "Special Note", addToCartBtn: "Add to Cart", tableOrders: "Table Orders",
+          productAnalytics: "Product Sales Analytics", totalProductsSold: "Total Products Sold", topCategory: "Top Category", bestSeller: "Best Seller", avgOrderValue: "Avg Order Value",
+          orderDetails: "Order Details", tableNumber: "Table Number", orderStatus: "Status", orderedProducts: "Ordered Products", unitPrice: "Unit Price"
         },
         km: {
           navOverview: "ទិដ្ឋភាពទូទៅ", navTables: "តុ", navMenu: "ម៉ឺនុយ", navOrders: "ការកុម្ម៉ង់", navKitchen: "ផ្ទះបាយ", navCashier: "គិតលុយ", navSettings: "ការកំណត់", live: "ដំណើរការ", customerView: "មើលជាភ្ញៀវ",
@@ -597,7 +660,9 @@
           checkoutTitle: "ទូទាត់ប្រាក់", totalAmount: "ទឹកប្រាក់សរុប៖", cashReceived: "ប្រាក់ទទួល", changeReturn: "ប្រាក់អាប់៖", payPrintBtn: "ទូទាត់ & ព្រីន", payConfirmBtn: "បញ្ជាក់ការទូទាត់",
           myOrdersBtn: "ការកុម្ម៉ង់ខ្ញុំ", revenueAnalytics: "ក្រាបវិភាគចំណូល", daily: "ប្រចាំថ្ងៃ", weekly: "សប្តាហ៍", monthly: "ខែ", placeOrderBtn: "បញ្ជាក់ការកុម្ម៉ង់",
           editTableTitle: "ផ្លាស់ប្តូរតុ", editTableDesc: "សូមបញ្ចូលលេខតុថ្មីរបស់អ្នក", confirmBtn: "បញ្ជាក់", seeMoreBtn: "មើលបន្ថែម ↓", 
-          sugarLevel: "កម្រិតស្ករ (Sugar Level)", iceLevel: "កម្រិតទឹកកក (Ice Level)", specialNote: "ចំណាំ (Note)", addToCartBtn: "ដាក់ចូលកន្ត្រក", tableOrders: "ការកុម្ម៉ង់របស់តុ"
+          sugarLevel: "កម្រិតស្ករ (Sugar Level)", iceLevel: "កម្រិតទឹកកក (Ice Level)", specialNote: "ចំណាំ (Note)", addToCartBtn: "ដាក់ចូលកន្ត្រក", tableOrders: "ការកុម្ម៉ង់របស់តុ",
+          productAnalytics: "របាយការណ៍លក់ទំនិញ", totalProductsSold: "ទំនិញលក់បានសរុប", topCategory: "ប្រភេទលក់ដាច់បំផុត", bestSeller: "ទំនិញលក់ដាច់បំផុត", avgOrderValue: "តម្លៃកុម្ម៉ង់មធ្យម",
+          orderDetails: "ព័ត៌មានលម្អិតការកុម្ម៉ង់", tableNumber: "លេខតុ", orderStatus: "ស្ថានភាព", orderedProducts: "ទំនិញដែលបានកុម្ម៉ង់", unitPrice: "តម្លៃរាយ"
         }
       };
 
@@ -631,8 +696,8 @@
         if(currentView === 'customer') renderCustomerMenu(currentCatFilter, false);
       }
 
-      // ================= DATABASE (REAL-TIME SYNC) =================
-      const DB_KEY = { tables: "ch_tables", menu: "ch_menu", orders: "ch_orders", settings: "ch_settings", count: "ch_count", promo: "ch_promo" };
+      // ================= DATABASE (REAL-TIME SYNC & ANALYTICS) =================
+      const DB_KEY = { tables: "ch_tables", menu: "ch_menu", orders: "ch_orders", settings: "ch_settings", count: "ch_count", promo: "ch_promo", analytics: "ch_analytics" };
       let fbDb = null; let usingFirebase = false;
 
       function initDB() {
@@ -652,6 +717,15 @@
         if (!localStorage.getItem(DB_KEY.orders)) localStorage.setItem(DB_KEY.orders, JSON.stringify([]));
         if (!localStorage.getItem(DB_KEY.count)) localStorage.setItem(DB_KEY.count, "100");
         if (!localStorage.getItem(DB_KEY.promo)) localStorage.setItem(DB_KEY.promo, JSON.stringify({ active: true, url: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=1200&h=400&fit=crop" }));
+
+        // Init Analytics DB if empty
+        if (!localStorage.getItem(DB_KEY.analytics)) {
+            localStorage.setItem(DB_KEY.analytics, JSON.stringify({
+                totalRevenue: 0, totalOrders: 0, totalProducts: 0,
+                categorySales: {}, productSales: {},
+                daily: {}, monthly: {}, yearly: {}
+            }));
+        }
 
         connectFirebase();
       }
@@ -673,6 +747,7 @@
                         if(data.orders) { localStorage.setItem(DB_KEY.orders, JSON.stringify(data.orders)); checkCustomerOrderAlerts(data.orders); }
                         if(data.count) localStorage.setItem(DB_KEY.count, data.count);
                         if(data.promo) localStorage.setItem(DB_KEY.promo, JSON.stringify(data.promo));
+                        if(data.analytics) localStorage.setItem(DB_KEY.analytics, JSON.stringify(data.analytics));
                         refreshUI();
                     }
                 });
@@ -726,7 +801,7 @@
         renderOverviewOrders(); renderOverviewTables(); renderAdminTables(); renderAdminMenu(); renderAllOrders(); renderKitchen();
         if (currentAdminTab === "cashier") renderCashier();
         if (currentAdminTab === "settings") loadSettings();
-        if (currentAdminTab === "overview") updateChart(currentChartMode);
+        if (currentAdminTab === "overview") { updateChart(currentChartMode); renderProductAnalytics(); }
         if (currentView === "customer") { renderPromoBanner(); updateMyOrdersUI(); updateMyOrdersBtn(); }
         renderTableLive(); // update live table if open
       }
@@ -744,7 +819,7 @@
           if(bKitchen) { bKitchen.textContent = kitchenCount; bKitchen.style.display = kitchenCount > 0 ? 'inline-block' : 'none'; }
       }
 
-      // ================= CHART & STATS =================
+      // ================= CHART, STATS & ANALYTICS =================
       function updateStats() {
         const orders = dbGet(DB_KEY.orders) || []; const tables = dbGet(DB_KEY.tables) || [];
         const today = orders.filter(o => new Date(o.time).toDateString() === new Date().toDateString());
@@ -753,6 +828,7 @@
         document.getElementById("stat-tables").textContent = tables.filter(t => t.status === "occupied").length;
         document.getElementById("stat-pending").textContent = orders.filter(o => o.status === "pending" || o.status === "preparing").length;
       }
+      
       function updateChart(mode) {
         currentChartMode = mode; document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active')); document.querySelector(`.chart-btn[onclick="updateChart('${mode}')"]`).classList.add('active');
         const orders = (dbGet(DB_KEY.orders) || []).filter(o => o.status === 'done');
@@ -765,8 +841,92 @@
         revenueChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Revenue ($)', data: data, borderColor: '#c9a84c', backgroundColor: 'rgba(201, 168, 76, 0.2)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: '#e8c97a' }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8a7d6b' } }, x: { grid: { display: false }, ticks: { color: '#8a7d6b' } } } } });
       }
 
+      // Sync and Render Product Analytics (Dynamically from Done Orders)
+      function syncAnalyticsData() {
+          const orders = (dbGet(DB_KEY.orders)||[]).filter(o => o.status === 'done');
+          const menu = dbGet(DB_KEY.menu)||[];
+          
+          let analytics = { totalRevenue: 0, totalOrders: orders.length, totalProducts: 0, categorySales: {}, productSales: {} };
+
+          orders.forEach(o => {
+              analytics.totalRevenue += o.total;
+              o.items.forEach(i => {
+                  const qty = i.qty;
+                  const lineTotal = i.price * qty;
+                  analytics.totalProducts += qty;
+
+                  let cat = "Uncategorized";
+                  if (i.cat) cat = i.cat;
+                  else {
+                      const mItem = menu.find(m => m.id == i.id);
+                      if(mItem && mItem.cat) cat = mItem.cat;
+                  }
+
+                  if(!analytics.categorySales[cat]) analytics.categorySales[cat] = 0;
+                  analytics.categorySales[cat] += qty;
+
+                  const pName = i.name || "Unknown";
+                  if(!analytics.productSales[pName]) analytics.productSales[pName] = { qty: 0, revenue: 0 };
+                  analytics.productSales[pName].qty += qty;
+                  analytics.productSales[pName].revenue += lineTotal;
+              });
+          });
+          dbSet(DB_KEY.analytics, analytics);
+          return analytics;
+      }
+
+      let categoryChartInst = null;
+      let topProductsChartInst = null;
+      function renderProductAnalytics() {
+          const analytics = syncAnalyticsData();
+          
+          document.getElementById('stat-total-products').textContent = analytics.totalProducts;
+          document.getElementById('stat-aov').textContent = analytics.totalOrders > 0 ? "$" + (analytics.totalRevenue / analytics.totalOrders).toFixed(2) : "$0.00";
+          
+          let topCat = "-"; let maxCatQty = 0;
+          Object.entries(analytics.categorySales).forEach(([c, q]) => { if(q > maxCatQty) { maxCatQty=q; topCat=c; } });
+          document.getElementById('stat-top-cat').textContent = topCat;
+
+          let bestSeller = "-"; let maxProdQty = 0;
+          Object.entries(analytics.productSales).forEach(([p, d]) => { if(d.qty > maxProdQty) { maxProdQty=d.qty; bestSeller=p; } });
+          document.getElementById('stat-best-seller').textContent = bestSeller;
+
+          const ctxCat = document.getElementById('categoryChart').getContext('2d');
+          if(categoryChartInst) categoryChartInst.destroy();
+          categoryChartInst = new Chart(ctxCat, {
+              type: 'doughnut',
+              data: {
+                  labels: Object.keys(analytics.categorySales),
+                  datasets: [{
+                      data: Object.values(analytics.categorySales),
+                      backgroundColor: ['#c9a84c', '#e8c97a', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6', '#f1c40f'],
+                      borderColor: '#1a1612',
+                      borderWidth: 2
+                  }]
+              },
+              options: { maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: {color: '#e8dcc8'} } } }
+          });
+
+          const sortedProducts = Object.entries(analytics.productSales).sort((a,b)=>b[1].qty - a[1].qty).slice(0, 10);
+          const ctxProd = document.getElementById('topProductsChart').getContext('2d');
+          if(topProductsChartInst) topProductsChartInst.destroy();
+          topProductsChartInst = new Chart(ctxProd, {
+              type: 'bar',
+              data: {
+                  labels: sortedProducts.map(p => p[0]),
+                  datasets: [{
+                      label: 'Quantity Sold',
+                      data: sortedProducts.map(p => p[1].qty),
+                      backgroundColor: '#c9a84c',
+                      borderRadius: 4
+                  }]
+              },
+              options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8a7d6b' } }, x: { grid: { display: false }, ticks: { color: '#8a7d6b' } } } }
+          });
+      }
+
       // ================= ADMIN FUNCTIONS =================
-      function renderOverviewOrders() { const el = document.getElementById("recent-orders-list"); if(el) el.innerHTML = (dbGet(DB_KEY.orders)||[]).slice(-5).reverse().map(o => `<div class="order-row"><div>${o.id}</div><div>T-${o.table}</div><div style="font-size:0.75rem;">${o.items.length} items</div><div><strong style="color:var(--gold)">$${o.total.toFixed(2)}</strong></div><div><span class="order-status status-${o.status}">${o.status}</span></div><div><button class="btn btn-outline btn-sm" onclick="advanceOrder('${o.id}')">Next</button></div></div>`).join(""); }
+      function renderOverviewOrders() { const el = document.getElementById("recent-orders-list"); if(el) el.innerHTML = (dbGet(DB_KEY.orders)||[]).slice(-5).reverse().map(o => `<div class="order-row" style="cursor:pointer;" onclick="viewOrderPreview('${o.id}')"><div>${o.id}</div><div>T-${o.table}</div><div style="font-size:0.75rem;">${o.items.length} items</div><div><strong style="color:var(--gold)">$${o.total.toFixed(2)}</strong></div><div><span class="order-status status-${o.status}">${o.status}</span></div><div><button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); advanceOrder('${o.id}')">Next</button></div></div>`).join(""); }
       function renderOverviewTables() { const el = document.getElementById("overview-tables-grid"); if(el) el.innerHTML = (dbGet(DB_KEY.tables)||[]).map(t => `<div class="table-card ${t.status==='occupied'?'occupied':''}"><div class="table-num">T-${t.num}</div><div class="table-status ${t.status==='occupied'?'busy':'free'}">${t.status}</div></div>`).join(""); }
       function addTable() { const num = parseInt(document.getElementById("add-table-num").value); if (!num) return; let tables = dbGet(DB_KEY.tables) || []; if (tables.find(t => t.num === num)) return showToast("Table Exists!"); tables.push({ id: Date.now(), num, status: "free", currentOrders: 0 }); tables.sort((a, b) => a.num - b.num); dbSet(DB_KEY.tables, tables); document.getElementById("add-table-num").value = ""; refreshUI(); showToast("Table Added!"); }
       function removeTable(num) { if (confirm("Delete Table?")) { dbSet(DB_KEY.tables, (dbGet(DB_KEY.tables)||[]).filter(t => t.num !== num)); refreshUI(); } }
@@ -831,9 +991,9 @@
 
       // QR
       function showQR(num) { document.getElementById("qr-modal").classList.add("open"); document.getElementById("qr-table-label").textContent = "Table " + num; document.getElementById("qr-display").innerHTML = ""; const url = window.location.href.split("?")[0] + "?table=" + num; try { new QRCode(document.getElementById("qr-display"), { text: url, width: 200, height: 200, colorDark : "#000000", colorLight : "#ffffff" }); } catch(e) { document.getElementById("qr-display").innerHTML = "QR Code"; } }
-      function printQR() { const win = window.open("", "_blank"); win.document.write(`<html><body style="text-align:center;font-family:sans-serif;padding:40px;"><h2>COFE BUSRA</h2><p>${document.getElementById("qr-table-label").textContent}</p>${document.getElementById("qr-display").innerHTML}<p style="font-size:12px;">Scan to order</p><\/body><\/html>`); win.document.close(); setTimeout(() => { win.print(); win.close(); }, 300); }
+      function printQR() { const win = window.open("", "_blank"); win.document.write(`<html><body style="text-align:center;font-family:sans-serif;padding:40px;"><h2>COFFEE BUSRA</h2><p>${document.getElementById("qr-table-label").textContent}</p>${document.getElementById("qr-display").innerHTML}<p style="font-size:12px;">Scan to order</p><\/body><\/html>`); win.document.close(); setTimeout(() => { win.print(); win.close(); }, 300); }
 
-      // ADMIN MENU (BEAUTIFUL EDIT CARDS WITH NEW TOGGLE SWITCH)
+      // ADMIN MENU
       function renderAdminMenu() { 
         const el = document.getElementById("admin-menu-grid"); 
         if(el) {
@@ -855,14 +1015,12 @@
                         <div class="c-item-footer">
                             <div class="c-item-price">$${m.price.toFixed(2)}</div>
                             <div style="display:flex; gap:0.8rem; align-items:center;">
-                                
                                 <div class="switch-label-wrap" title="Turn Item On/Off">
                                     <label class="switch">
                                       <input type="checkbox" ${m.available ? 'checked' : ''} onchange="toggleAvailable(${m.id})">
                                       <span class="slider"></span>
                                     </label>
                                 </div>
-
                                 <button class="btn btn-outline btn-sm" onclick="openEditMenuModal(${m.id})">Edit</button>
                             </div>
                         </div>
@@ -879,10 +1037,75 @@
       function toggleAvailable(id) { let m=dbGet(DB_KEY.menu)||[]; m=m.map(x=>x.id===id?{...x,available:!x.available}:x); dbSet(DB_KEY.menu,m); refreshUI(); showToast("Status Updated!"); }
 
       // ORDERS & KITCHEN
-      function renderAllOrders() { const el = document.getElementById("all-orders-list"); if(el) el.innerHTML = (dbGet(DB_KEY.orders)||[]).slice().reverse().map(o => `<div class="order-row"><div>${o.id}</div><div><strong style="color:var(--cream)">T-${o.table}</strong></div><div style="font-size:0.8rem; color:var(--muted)">${o.items.map(i=>i.qty+"x "+i.displayName).join(", ")}</div><div><strong style="color:var(--gold)">$${o.total.toFixed(2)}</strong></div><div><span class="order-status status-${o.status}">${o.status}</span></div><div style="display:flex;gap:0.5rem;"><button class="btn btn-outline btn-sm" onclick="advanceOrder('${o.id}')">Next</button> <button class="btn btn-danger btn-sm" style="padding:0.3rem 0.6rem;" onclick="deleteOrder('${o.id}')">&times;</button></div></div>`).join(""); }
+      function renderAllOrders() { 
+          const el = document.getElementById("all-orders-list"); 
+          if(el) el.innerHTML = (dbGet(DB_KEY.orders)||[]).slice().reverse().map(o => `
+            <div class="order-row" style="cursor:pointer;" onclick="viewOrderPreview('${o.id}')">
+                <div>${o.id}</div>
+                <div><strong style="color:var(--cream)">T-${o.table}</strong></div>
+                <div style="font-size:0.8rem; color:var(--muted)">${o.items.map(i=>i.qty+"x "+i.displayName).join(", ")}</div>
+                <div><strong style="color:var(--gold)">$${o.total.toFixed(2)}</strong></div>
+                <div><span class="order-status status-${o.status}">${o.status}</span></div>
+                <div style="display:flex;gap:0.5rem;">
+                    <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); advanceOrder('${o.id}')">Next</button> 
+                    <button class="btn btn-danger btn-sm" style="padding:0.3rem 0.6rem;" onclick="event.stopPropagation(); deleteOrder('${o.id}')">&times;</button>
+                </div>
+            </div>`).join(""); 
+      }
       function advanceOrder(id) { const seq=["pending","preparing","ready","done"]; let orders=dbGet(DB_KEY.orders)||[]; orders=orders.map(o => { if(o.id===id) { const s=seq[Math.min(seq.indexOf(o.status)+1,3)]; if(s==="done") updateTableStatus(o.table,-1); return {...o,status:s}; } return o; }); dbSet(DB_KEY.orders,orders); refreshUI(); }
       function deleteOrder(id) { if(!confirm("Delete Order?")) return; let orders=dbGet(DB_KEY.orders)||[], o=orders.find(x=>x.id===id); if(o&&o.status!=="done") updateTableStatus(o.table,-1); dbSet(DB_KEY.orders, orders.filter(x=>x.id!==id)); refreshUI(); }
       
+      // Order Preview Modal Function
+      function viewOrderPreview(orderId) {
+          const order = (dbGet(DB_KEY.orders)||[]).find(o => o.id === orderId);
+          if(!order) return;
+          
+          document.getElementById('preview-order-id').textContent = order.id;
+          document.getElementById('preview-order-time').textContent = new Date(order.time).toLocaleString();
+          document.getElementById('preview-order-table').textContent = "T-" + order.table;
+          
+          const statusEl = document.getElementById('preview-order-status');
+          statusEl.className = `order-status status-${order.status}`;
+          statusEl.textContent = order.status.toUpperCase();
+          
+          document.getElementById('preview-order-total').textContent = "$" + order.total.toFixed(2);
+          
+          const noteEl = document.getElementById('preview-order-note');
+          if(order.note) {
+              noteEl.innerHTML = `<strong>Note:</strong> ${order.note}`;
+              noteEl.style.display = 'block';
+          } else {
+              noteEl.style.display = 'none';
+          }
+
+          const menu = dbGet(DB_KEY.menu)||[];
+
+          let html = order.items.map(i => {
+              const mItem = menu.find(m => m.id === i.id) || {};
+              const img = i.image || mItem.image || 'https://via.placeholder.com/100';
+              const cat = i.cat || mItem.cat || 'Item';
+              const subtotal = (i.price * i.qty).toFixed(2);
+              
+              return `
+              <div style="display:flex; gap:1.2rem; align-items:center; background:linear-gradient(145deg, var(--surface2), var(--surface)); padding:1rem; border-radius:16px; border:1px solid rgba(255,255,255,0.05); box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+                  <img src="${img}" style="width:70px; height:70px; border-radius:12px; object-fit:cover; box-shadow:0 2px 8px rgba(0,0,0,0.5);">
+                  <div style="flex:1;">
+                      <div style="font-size:0.75rem; color:var(--gold); text-transform:uppercase; font-weight:bold; letter-spacing:1px; margin-bottom:0.2rem;">${cat}</div>
+                      <div style="font-size:1.1rem; font-weight:bold; color:var(--cream); margin-bottom:0.2rem;">${i.displayName}</div>
+                      <div style="font-size:0.9rem; color:var(--muted);"><span data-i18n="unitPrice">Unit Price:</span> $${i.price.toFixed(2)}</div>
+                  </div>
+                  <div style="text-align:right;">
+                      <div style="font-size:1.1rem; color:var(--cream); font-weight:bold;">x${i.qty}</div>
+                      <div style="font-size:1.3rem; font-weight:bold; color:var(--gold); margin-top:0.3rem;">$${subtotal}</div>
+                  </div>
+              </div>`;
+          }).join("");
+          
+          document.getElementById('preview-order-items').innerHTML = html;
+          document.getElementById('order-preview-modal').classList.add('open');
+      }
+      
+      // Kitchen Workflow Fixed: No Finish/Done Button for Kitchen Staff
       function renderKitchen() { 
           const el = document.getElementById("kitchen-grid"); if(!el) return; 
           const orders = (dbGet(DB_KEY.orders)||[]).filter(o=>o.status!=="done"); 
@@ -903,7 +1126,7 @@
                 <div style="padding:1.5rem; margin-top:auto; background:rgba(0,0,0,0.2);">
                     ${o.status==='pending'?`<button class="btn btn-gold btn-full" style="padding:1rem;" onclick="advanceOrder('${o.id}')">Start Prep</button>`:''}
                     ${o.status==='preparing'?`<button class="btn btn-success btn-full" style="padding:1rem;" onclick="advanceOrder('${o.id}')">Mark Ready</button>`:''}
-                    ${o.status==='ready'?`<button class="btn btn-outline btn-full" style="padding:1rem;" onclick="advanceOrder('${o.id}')">Finish (Done)</button>`:''}
+                    ${o.status==='ready'?`<div style="text-align:center; font-weight:bold; color:var(--green); font-size:1.1rem; padding:1rem;">Ready for Cashier ✅</div>`:''}
                 </div>
             </div>
           `).join(""); 
@@ -1066,7 +1289,7 @@
           const win = window.open("", "_blank"); 
           const itemsHtml = order.items.map(i => `<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>${i.qty}x ${i.displayName}</span><span>$${(i.price * i.qty).toFixed(2)}</span></div>`).join(""); 
           win.document.write(`<html><body style="font-family:monospace;padding:20px;width:300px;color:black;">
-            <h2 style="text-align:center; margin-bottom:5px;">COFE BUSRA</h2>
+            <h2 style="text-align:center; margin-bottom:5px;">COFFEE BUSRA</h2>
             <div style="text-align:center;font-size:12px;margin-bottom:15px;border-bottom:1px dashed #000;padding-bottom:10px;">Order: ${order.id}<br>Table: ${order.table}<br>${new Date(order.time).toLocaleString()}</div>
             <div style="margin-bottom:15px;border-bottom:1px dashed #000;padding-bottom:10px;">${itemsHtml}</div>
             
@@ -1121,6 +1344,7 @@
           showToast("Promo Banner Updated! 🎉");
       }
 
+      // STRICT TELEGRAM FALLBACK WRAPPER
       function notifyTelegram(order, lat, lng) {
         const s = JSON.parse(localStorage.getItem(DB_KEY.settings)); 
         if(!s || !s.tgToken || !s.tgChatId) return; 
@@ -1133,8 +1357,8 @@
             fetch(`https://api.telegram.org/bot${s.tgToken}/sendMessage`, { 
                 method: 'POST', 
                 headers: { 'Content-Type': 'application/json' }, 
-                body: JSON.stringify({ chat_id: s.tgChatId, text: text, parse_mode: 'Markdown', disable_web_page_preview: false }) 
-            }); 
+                body: JSON.stringify({ chat_id: s.tgChatId, text: text, parse_mode: 'Markdown' }) 
+            }).catch(e => console.warn("Telegram fetch error caught silently", e)); 
         } catch(e) {}
       }
 
@@ -1165,7 +1389,7 @@
         
         const el = document.getElementById("customer-menu-grid"); if (!el) return;
         el.innerHTML = itemsToShow.map(item => `
-          <div class="c-menu-card ${!item.available ? "unavailable" : ""}" onclick="${item.available ? `handleItemClick(${item.id})` : ''}">
+          <div class="c-menu-card ${!item.available ? "unavailable" : ""}" onclick="${item.available ? `clickItem(event, ${item.id})` : ''}">
             <div class="c-img-wrapper">
                 <img class="c-item-img" src="${item.image || 'https://via.placeholder.com/400?text=Food'}" onerror="this.src='https://via.placeholder.com/400?text=Food'"/>
                 <div class="c-img-overlay"></div>
@@ -1211,7 +1435,11 @@
         }
       }
 
-      // ITEM CLICK / OPTIONS MODAL (Advanced Customization)
+      function clickItem(e, id) {
+          if(e) e.stopPropagation();
+          handleItemClick(id);
+      }
+
       function handleItemClick(id) {
         const item = (dbGet(DB_KEY.menu)||[]).find(m=>m.id===id); if (!item || !item.available) return;
         
@@ -1222,7 +1450,6 @@
             document.getElementById('opt-item-id').value = id;
             document.getElementById('opt-item-name').textContent = item.name;
             
-            // Default selection Reset
             selectSugar('100%');
             selectIce('Normal Ice');
             document.getElementById('opt-item-note').value = "";
@@ -1283,7 +1510,7 @@
         }
 
         const ex = cart.find(c => c.cartId == cartId); 
-        if(ex) ex.qty++; else cart.push({...item, cartId: cartId, displayName: dName, qty:1}); 
+        if(ex) ex.qty++; else cart.push({...item, cartId: cartId, displayName: dName, qty:1, cat: item.cat}); // Store cat for Analytics
         updateCartUI(); showToast("Added to cart 🛒");
       }
       
@@ -1306,7 +1533,7 @@
       function closeSidebars() { document.getElementById("cart-sidebar").classList.remove("open"); document.getElementById("my-orders-sidebar").classList.remove("open"); document.getElementById("sidebar-overlay").classList.remove("open"); }
       function clearMyOrders() { if(confirm("Clear your order history?")) { mySessionOrders = []; localStorage.setItem('my_orders_history', JSON.stringify(mySessionOrders)); updateMyOrdersUI(); updateMyOrdersBtn(); showToast("History cleared 🗑️"); } }
 
-      // PLACE ORDER & GET GPS LOCATION
+      // PLACE ORDER WITH STRICT TIMEOUT FIX FOR TELEGRAM
       function placeOrder() {
         if(!cart.length) return; 
         
@@ -1318,33 +1545,46 @@
         const note = document.getElementById("order-note").value.trim(); const total = cart.reduce((s,c)=>s+c.price*c.qty, 0);
         let count = parseInt(dbGet(DB_KEY.count)) || 100; count++; dbSet(DB_KEY.count, count);
         const orderId = "#"+count;
-        const order = { id: orderId, table: customerTableNum, items: cart.map(c=>({id:c.id, name:c.name, displayName: c.displayName, price:c.price, qty:c.qty, image:c.image})), total, note, status: "pending", time: Date.now() };
         
+        // Build the order Object
+        const order = { 
+            id: orderId, 
+            table: customerTableNum, 
+            items: cart.map(c=>({id:c.id, name:c.name, displayName: c.displayName, price:c.price, qty:c.qty, image:c.image, cat:c.cat})), 
+            total, note, status: "pending", time: Date.now() 
+        };
+        
+        // Save locally to instant UI update
         let orders = dbGet(DB_KEY.orders)||[]; orders.push(order); dbSet(DB_KEY.orders, orders); updateTableStatus(customerTableNum, 1);
         mySessionOrders.push(orderId); localStorage.setItem('my_orders_history', JSON.stringify(mySessionOrders));
 
-        if("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                pos => { 
-                    notifyTelegram(order, pos.coords.latitude, pos.coords.longitude); 
-                    finish(); 
-                }, 
-                err => { 
-                    notifyTelegram(order, null, null); 
-                    finish(); 
-                }, 
-                { timeout: 6000, enableHighAccuracy: true } 
-            );
-        } else { 
-            notifyTelegram(order, null, null); 
-            finish(); 
-        }
-
-        function finish() {
+        // Telegram Geolocation Handling - with strict fallbacks
+        let tgSent = false;
+        
+        const wrapUpOrder = () => {
             cart=[]; document.getElementById("order-note").value=""; updateCartUI(); closeSidebars(); updateMyOrdersBtn(); 
             showToast("Order placed successfully! 🎉");
             btn.disabled=false; btn.textContent = "Place Order"; 
             refreshUI(); openMyOrders();
+        };
+
+        if(window.isSecureContext && "geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                pos => { 
+                    if(!tgSent) { tgSent = true; notifyTelegram(order, pos.coords.latitude, pos.coords.longitude); wrapUpOrder(); }
+                }, 
+                err => { 
+                    if(!tgSent) { tgSent = true; notifyTelegram(order, null, null); wrapUpOrder(); }
+                }, 
+                { timeout: 3500, enableHighAccuracy: true } 
+            );
+            
+            // Hard timeout in case browser hangs on Geolocation prompt natively
+            setTimeout(() => {
+                if(!tgSent) { tgSent = true; notifyTelegram(order, null, null); wrapUpOrder(); }
+            }, 4000);
+        } else { 
+            tgSent = true; notifyTelegram(order, null, null); wrapUpOrder(); 
         }
       }
 
